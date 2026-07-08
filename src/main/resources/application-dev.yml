@@ -1,0 +1,20 @@
+spring:
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/spring_webflux_tutorial
+    username: spring_webflux_tutorial
+    password: spring_webflux_tutorial
+  flyway:
+    url: jdbc:postgresql://localhost:5432/spring_webflux_tutorial
+    user: spring_webflux_tutorial
+    password: spring_webflux_tutorial
+    enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+
+logging:
+  level:
+    edgareldy.springwebfluxtutorial: DEBUG
