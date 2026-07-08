@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: spring-webflux-tutorial
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+
+server:
+  port: 8080

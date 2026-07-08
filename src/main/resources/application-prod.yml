@@ -1,0 +1,22 @@
+spring:
+  r2dbc:
+    url: ${R2DBC_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  flyway:
+    url: ${FLYWAY_URL}
+    user: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+logging:
+  level:
+    root: INFO
+  file:
+    name: logs/app.log
