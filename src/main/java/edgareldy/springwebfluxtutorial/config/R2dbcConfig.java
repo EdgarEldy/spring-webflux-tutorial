@@ -1,0 +1,28 @@
+package edgareldy.springwebfluxtutorial.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.r2dbc.config.EnableR2dbcAuditing;
+import org.springframework.r2dbc.connection.R2dbcTransactionManager;
+import org.springframework.transaction.ReactiveTransactionManager;
+import io.r2dbc.spi.ConnectionFactory;
+
+/**
+ * Wires the reactive transaction manager on top of the R2DBC ConnectionFactory that Spring
+ * Boot autoconfigures from spring.r2dbc.url, and enables auditing metadata (createdDate,
+ * lastModifiedDate) on R2DBC entities.
+ * <p>
+ * Created by edgar.muhamyangabo on 7/8/26
+ * Author : edgar.muhamyangabo
+ * Date : 7/8/26
+ * Project : spring-webflux-tutorial
+ */
+@Configuration
+@EnableR2dbcAuditing
+public class R2dbcConfig {
+
+    @Bean
+    public ReactiveTransactionManager transactionManager(ConnectionFactory connectionFactory) {
+        return new R2dbcTransactionManager(connectionFactory);
+    }
+}
