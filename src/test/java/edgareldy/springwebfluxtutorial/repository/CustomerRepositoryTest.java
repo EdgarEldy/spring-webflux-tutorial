@@ -28,8 +28,18 @@ class CustomerRepositoryTest {
     @Autowired
     private CustomerRepository customerRepository;
 
+    @Autowired
+    private OrderRepository orderRepository;
+
+    /**
+     * Deletes orders first: this test class shares its Spring context (and Testcontainers
+     * instance) with OrderRepositoryTest via context caching, since both use the exact same
+     * @DataR2dbcTest configuration, so leftover orders from another test class can still
+     * reference a customer this class is about to delete.
+     */
     @BeforeEach
     void cleanDatabase() {
+        orderRepository.deleteAll().block();
         customerRepository.deleteAll().block();
     }
 

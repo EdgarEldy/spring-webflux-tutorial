@@ -30,8 +30,23 @@ class CategoryRepositoryTest {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Autowired
+    private ProductRepository productRepository;
+
+    @Autowired
+    private OrderRepository orderRepository;
+
+    /**
+     * Deletes orders and products first: this test class shares its Spring context (and
+     * Testcontainers instance) with OrderRepositoryTest/ProductRepositoryTest via context
+     * caching, since all three use the exact same @DataR2dbcTest configuration, so leftover
+     * rows from another test class can still reference a category this class is about to
+     * delete.
+     */
     @BeforeEach
     void cleanDatabase() {
+        orderRepository.deleteAll().block();
+        productRepository.deleteAll().block();
         categoryRepository.deleteAll().block();
     }
 
