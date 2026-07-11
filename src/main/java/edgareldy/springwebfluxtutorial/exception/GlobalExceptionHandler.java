@@ -101,8 +101,9 @@ public class GlobalExceptionHandler implements WebExceptionHandler {
         if (ex instanceof WebExchangeBindException) {
             return "Validation failed";
         }
-        if (ex instanceof ServerWebInputException) {
-            return "Malformed request body";
+        if (ex instanceof ServerWebInputException serverWebInputException) {
+            String reason = serverWebInputException.getReason();
+            return reason != null ? reason : "Malformed request body";
         }
         if (ex instanceof AuthenticationException) {
             return "Invalid username or password";
