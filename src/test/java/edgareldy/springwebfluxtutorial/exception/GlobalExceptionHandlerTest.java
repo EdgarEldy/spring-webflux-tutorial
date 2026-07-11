@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.mock.http.server.reactive.MockServerHttpRequest;
 import org.springframework.mock.web.server.MockServerWebExchange;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.server.ServerWebExchange;
@@ -41,6 +43,16 @@ class GlobalExceptionHandlerTest {
     @Test
     void mapsAuthenticationExceptionTo401() {
         assertStatus(new BadCredentialsException("bad credentials"), HttpStatus.UNAUTHORIZED);
+    }
+
+    @Test
+    void mapsGenericAuthenticationExceptionTo401() {
+        assertStatus(new AuthenticationCredentialsNotFoundException("no credentials"), HttpStatus.UNAUTHORIZED);
+    }
+
+    @Test
+    void mapsAccessDeniedExceptionTo403() {
+        assertStatus(new AccessDeniedException("denied"), HttpStatus.FORBIDDEN);
     }
 
     @Test
