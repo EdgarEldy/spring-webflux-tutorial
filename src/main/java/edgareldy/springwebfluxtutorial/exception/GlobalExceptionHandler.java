@@ -11,6 +11,8 @@ import org.springframework.core.annotation.Order;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebExchangeBindException;
@@ -88,6 +90,9 @@ public class GlobalExceptionHandler implements WebExceptionHandler {
         if (ex instanceof AuthenticationException) {
             return HttpStatus.UNAUTHORIZED;
         }
+        if (ex instanceof AccessDeniedException) {
+            return HttpStatus.FORBIDDEN;
+        }
         if (ex instanceof WebExchangeBindException || ex instanceof ServerWebInputException) {
             return HttpStatus.BAD_REQUEST;
         }
@@ -105,8 +110,14 @@ public class GlobalExceptionHandler implements WebExceptionHandler {
             String reason = serverWebInputException.getReason();
             return reason != null ? reason : "Malformed request body";
         }
-        if (ex instanceof AuthenticationException) {
+        if (ex instanceof BadCredentialsException) {
             return "Invalid username or password";
+        }
+        if (ex instanceof AuthenticationException) {
+            return "Authentication required";
+        }
+        if (ex instanceof AccessDeniedException) {
+            return "Access denied";
         }
         if (ex instanceof ResponseStatusException responseStatusException) {
             String reason = responseStatusException.getReason();
