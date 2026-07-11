@@ -6,6 +6,7 @@ import edgareldy.springwebfluxtutorial.dto.customer.CustomerResponse;
 import edgareldy.springwebfluxtutorial.exception.BusinessRuleException;
 import edgareldy.springwebfluxtutorial.exception.GlobalExceptionHandler;
 import edgareldy.springwebfluxtutorial.exception.ResourceNotFoundException;
+import edgareldy.springwebfluxtutorial.security.JwtService;
 import edgareldy.springwebfluxtutorial.service.CustomerService;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -26,7 +27,10 @@ import static org.mockito.Mockito.when;
 /**
  * WebTestClient tests for the Customer functional endpoints (CustomerRouter + CustomerHandler),
  * covering the nominal path plus the 400 (manual validation), 404 and 422 cases. Security
- * auto-configuration is excluded since no SecurityConfig exists yet on this branch.
+ * auto-configuration is excluded so SecurityConfig's real authorization rules do not apply
+ * here (see SecurityAuthorizationTest for that). JwtService is mocked because @WebFluxTest
+ * still instantiates any WebFilter bean present on the classpath regardless of excluded
+ * auto-configuration, and JwtAuthWebFilter needs it to construct.
  * <p>
  * Created by edgar.muhamyangabo on 7/8/26
  * Author : edgar.muhamyangabo
@@ -43,6 +47,9 @@ class CustomerRouterTest {
 
     @MockitoBean
     private CustomerService customerService;
+
+    @MockitoBean
+    private JwtService jwtService;
 
     @Test
     void findAllReturnsWrappedPage() {

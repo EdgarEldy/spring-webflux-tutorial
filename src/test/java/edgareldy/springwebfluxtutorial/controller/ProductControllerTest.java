@@ -6,6 +6,7 @@ import edgareldy.springwebfluxtutorial.dto.product.ProductRequest;
 import edgareldy.springwebfluxtutorial.dto.product.ProductResponse;
 import edgareldy.springwebfluxtutorial.exception.GlobalExceptionHandler;
 import edgareldy.springwebfluxtutorial.exception.ResourceNotFoundException;
+import edgareldy.springwebfluxtutorial.security.JwtService;
 import edgareldy.springwebfluxtutorial.service.ProductService;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -27,8 +28,10 @@ import static org.mockito.Mockito.when;
  * WebTestClient tests for ProductController, covering the nominal path, category filtering,
  * and the 404/400 cases handled by GlobalExceptionHandler (imported explicitly since
  * @WebFluxTest does not pick up a plain WebExceptionHandler bean by default). Security
- * auto-configuration is excluded since no SecurityConfig exists yet on this branch
- * (feature/auth is where authorization rules on these endpoints get introduced).
+ * auto-configuration is excluded so SecurityConfig's real authorization rules do not apply
+ * here (see SecurityAuthorizationTest for that). JwtService is mocked because @WebFluxTest
+ * still instantiates any WebFilter bean present on the classpath regardless of excluded
+ * auto-configuration, and JwtAuthWebFilter needs it to construct.
  * <p>
  * Created by edgar.muhamyangabo on 7/8/26
  * Author : edgar.muhamyangabo
@@ -45,6 +48,9 @@ class ProductControllerTest {
 
     @MockitoBean
     private ProductService productService;
+
+    @MockitoBean
+    private JwtService jwtService;
 
     @Test
     void findAllReturnsWrappedPage() {

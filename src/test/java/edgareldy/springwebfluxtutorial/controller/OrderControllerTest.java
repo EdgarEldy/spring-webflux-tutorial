@@ -6,6 +6,7 @@ import edgareldy.springwebfluxtutorial.dto.order.OrderResponse;
 import edgareldy.springwebfluxtutorial.dto.order.OrderStatusEvent;
 import edgareldy.springwebfluxtutorial.exception.GlobalExceptionHandler;
 import edgareldy.springwebfluxtutorial.exception.ResourceNotFoundException;
+import edgareldy.springwebfluxtutorial.security.JwtService;
 import edgareldy.springwebfluxtutorial.service.OrderService;
 import java.time.Instant;
 import java.util.List;
@@ -29,7 +30,10 @@ import static org.mockito.Mockito.when;
 /**
  * WebTestClient tests for OrderController, covering the nominal path, the 400/404 cases
  * GlobalExceptionHandler handles, and the SSE stream endpoint. Security auto-configuration is
- * excluded since no SecurityConfig exists yet on this branch.
+ * excluded so SecurityConfig's real authorization rules do not apply here (see
+ * SecurityAuthorizationTest for that). JwtService is mocked because @WebFluxTest still
+ * instantiates any WebFilter bean present on the classpath regardless of excluded
+ * auto-configuration, and JwtAuthWebFilter needs it to construct.
  * <p>
  * Created by edgar.muhamyangabo on 7/11/26
  * Author : edgar.muhamyangabo
@@ -49,6 +53,9 @@ class OrderControllerTest {
 
     @MockitoBean
     private Sinks.Many<OrderStatusEvent> orderStatusSink;
+
+    @MockitoBean
+    private JwtService jwtService;
 
     @Test
     void findAllReturnsWrappedPage() {
