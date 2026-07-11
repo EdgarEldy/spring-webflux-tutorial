@@ -9,6 +9,9 @@ spring:
     password: ${DB_PASSWORD}
     enabled: true
 
+jwt:
+  secret: ${JWT_SECRET}
+
 management:
   endpoints:
     web:

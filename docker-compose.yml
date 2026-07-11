@@ -26,6 +26,7 @@ services:
       FLYWAY_URL: ${FLYWAY_URL:-jdbc:postgresql://db:5432/spring_webflux_tutorial}
       DB_USERNAME: ${DB_USERNAME:-spring_webflux_tutorial}
       DB_PASSWORD: ${DB_PASSWORD:-spring_webflux_tutorial}
+      JWT_SECRET: ${JWT_SECRET}
     ports:
       - "8080:8080"
 
