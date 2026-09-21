@@ -48,7 +48,7 @@ class AuthServiceImplTest {
     }
 
     @Test
-    void registerSavesUserWithEncodedPasswordAndReturnsToken() {
+    void _01_ShouldSaveUserWithEncodedPasswordAndReturnToken_WhenUserRegisters() {
         RegisterRequest request = new RegisterRequest("ada", "supersecret", "ada@example.com");
         AppUser saved = AppUser.builder().id(1L).username("ada").password("hashed").email("ada@example.com")
                 .role(Role.USER).build();
@@ -67,7 +67,7 @@ class AuthServiceImplTest {
     }
 
     @Test
-    void registerErrorsWithBusinessRuleWhenUsernameTaken() {
+    void _02_ShouldErrorWithBusinessRule_WhenUsernameIsTaken() {
         RegisterRequest request = new RegisterRequest("ada", "supersecret", "ada@example.com");
         when(appUserRepository.existsByUsername("ada")).thenReturn(Mono.just(true));
 
@@ -77,7 +77,7 @@ class AuthServiceImplTest {
     }
 
     @Test
-    void registerErrorsWithBusinessRuleWhenEmailTaken() {
+    void _03_ShouldErrorWithBusinessRule_WhenEmailIsTaken() {
         RegisterRequest request = new RegisterRequest("ada", "supersecret", "ada@example.com");
         when(appUserRepository.existsByUsername("ada")).thenReturn(Mono.just(false));
         when(appUserRepository.existsByEmail("ada@example.com")).thenReturn(Mono.just(true));
@@ -88,7 +88,7 @@ class AuthServiceImplTest {
     }
 
     @Test
-    void loginReturnsTokenWhenPasswordMatches() {
+    void _04_ShouldReturnToken_WhenPasswordMatches() {
         LoginRequest request = new LoginRequest("ada", "supersecret");
         AppUser appUser = AppUser.builder().id(1L).username("ada").password("hashed").email("ada@example.com")
                 .role(Role.ADMIN).build();
@@ -103,7 +103,7 @@ class AuthServiceImplTest {
     }
 
     @Test
-    void loginErrorsWithBadCredentialsWhenPasswordDoesNotMatch() {
+    void _05_ShouldErrorWithBadCredentials_WhenPasswordDoesNotMatch() {
         LoginRequest request = new LoginRequest("ada", "wrong-password");
         AppUser appUser = AppUser.builder().id(1L).username("ada").password("hashed").email("ada@example.com")
                 .role(Role.USER).build();
@@ -117,7 +117,7 @@ class AuthServiceImplTest {
     }
 
     @Test
-    void loginErrorsWithBadCredentialsWhenUsernameMissing() {
+    void _06_ShouldErrorWithBadCredentials_WhenUsernameIsMissing() {
         when(appUserRepository.findByUsername("ghost")).thenReturn(Mono.empty());
 
         StepVerifier.create(authService.login(new LoginRequest("ghost", "whatever")))
@@ -126,7 +126,7 @@ class AuthServiceImplTest {
     }
 
     @Test
-    void meReturnsProfileWhenFound() {
+    void _07_ShouldReturnProfile_WhenUserIsFound() {
         AppUser appUser = AppUser.builder().id(1L).username("ada").password("hashed").email("ada@example.com")
                 .role(Role.USER).build();
         when(appUserRepository.findByUsername("ada")).thenReturn(Mono.just(appUser));
@@ -137,7 +137,7 @@ class AuthServiceImplTest {
     }
 
     @Test
-    void meErrorsWithResourceNotFoundWhenMissing() {
+    void _08_ShouldErrorWithResourceNotFound_WhenUserIsMissing() {
         when(appUserRepository.findByUsername("ghost")).thenReturn(Mono.empty());
 
         StepVerifier.create(authService.me("ghost"))
