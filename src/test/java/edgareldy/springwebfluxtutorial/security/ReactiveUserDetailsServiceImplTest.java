@@ -32,7 +32,7 @@ class ReactiveUserDetailsServiceImplTest {
     private ReactiveUserDetailsServiceImpl userDetailsService;
 
     @Test
-    void findByUsernameReturnsUserDetailsWithRolePrefixedAuthority() {
+    void _01_ShouldReturnUserDetailsWithRolePrefixedAuthority_WhenUsernameExists() {
         userDetailsService = new ReactiveUserDetailsServiceImpl(appUserRepository);
         AppUser appUser = AppUser.builder().id(1L).username("ada").password("hashed").email("ada@example.com")
                 .role(Role.ADMIN).build();
@@ -47,7 +47,7 @@ class ReactiveUserDetailsServiceImplTest {
     }
 
     @Test
-    void findByUsernameErrorsWithUsernameNotFoundWhenMissing() {
+    void _02_ShouldErrorWithUsernameNotFound_WhenUsernameIsMissing() {
         userDetailsService = new ReactiveUserDetailsServiceImpl(appUserRepository);
         when(appUserRepository.findByUsername("missing")).thenReturn(Mono.empty());
 

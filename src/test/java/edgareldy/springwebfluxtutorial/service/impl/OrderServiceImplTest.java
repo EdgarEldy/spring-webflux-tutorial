@@ -67,7 +67,7 @@ class OrderServiceImplTest {
     }
 
     @Test
-    void findByIdReturnsMappedResponseWhenFound() {
+    void _01_ShouldReturnMappedResponse_WhenOrderIsFound() {
         OrderView view = new OrderView(1L, 2L, 3L, 2, 2000, "Ada", "Lovelace", "Laptop");
         OrderResponse response = response();
         when(orderRepository.findByIdWithDetails(1L)).thenReturn(Mono.just(view));
@@ -79,7 +79,7 @@ class OrderServiceImplTest {
     }
 
     @Test
-    void findByIdErrorsWithResourceNotFoundWhenMissing() {
+    void _02_ShouldErrorWithResourceNotFound_WhenOrderIsMissing() {
         when(orderRepository.findByIdWithDetails(1L)).thenReturn(Mono.empty());
 
         StepVerifier.create(orderService.findById(1L))
@@ -88,7 +88,7 @@ class OrderServiceImplTest {
     }
 
     @Test
-    void createComputesTotalFromResolvedProductUnitPrice() {
+    void _03_ShouldComputeTotalFromProductUnitPrice_WhenOrderIsCreated() {
         OrderRequest request = new OrderRequest(2L, 3L, 4);
         Customer customer = Customer.builder().id(2L).firstName("Ada").lastName("Lovelace").address("1 Main St").build();
         Product product = Product.builder().id(3L).productName("Laptop").unitPrice(250f).build();
@@ -117,7 +117,7 @@ class OrderServiceImplTest {
     }
 
     @Test
-    void createErrorsWithResourceNotFoundWhenCustomerMissing() {
+    void _04_ShouldErrorWithResourceNotFound_WhenOrderCustomerIsMissing() {
         OrderRequest request = new OrderRequest(2L, 3L, 4);
         when(customerRepository.findById(2L)).thenReturn(Mono.empty());
         when(productRepository.findById(3L)).thenReturn(Mono.just(Product.builder().id(3L).unitPrice(250f).build()));
@@ -128,7 +128,7 @@ class OrderServiceImplTest {
     }
 
     @Test
-    void createErrorsWithResourceNotFoundWhenProductMissing() {
+    void _05_ShouldErrorWithResourceNotFound_WhenOrderProductIsMissing() {
         OrderRequest request = new OrderRequest(2L, 3L, 4);
         when(customerRepository.findById(2L)).thenReturn(
                 Mono.just(Customer.builder().id(2L).address("1 Main St").build()));
@@ -140,7 +140,7 @@ class OrderServiceImplTest {
     }
 
     @Test
-    void findAllZipsPagedContentWithTotalCount() {
+    void _06_ShouldZipPagedContentWithTotalCount_WhenAllOrdersAreRequested() {
         OrderView view = new OrderView(1L, 2L, 3L, 2, 2000, "Ada", "Lovelace", "Laptop");
         OrderResponse response = response();
         when(orderRepository.findAllWithDetails(20, 0)).thenReturn(Flux.just(view));
@@ -153,7 +153,7 @@ class OrderServiceImplTest {
     }
 
     @Test
-    void updateErrorsWithResourceNotFoundWhenOrderMissing() {
+    void _07_ShouldErrorWithResourceNotFound_WhenUpdatedOrderIsMissing() {
         when(orderRepository.findById(1L)).thenReturn(Mono.empty());
 
         StepVerifier.create(orderService.update(1L, new OrderRequest(2L, 3L, 4)))
@@ -162,7 +162,7 @@ class OrderServiceImplTest {
     }
 
     @Test
-    void updateRecomputesTotalAndPublishesUpdatedEvent() {
+    void _08_ShouldRecomputeTotalAndPublishUpdatedEvent_WhenOrderIsUpdated() {
         Order existing = Order.builder().id(1L).customerId(2L).productId(3L).quantity(1).total(1000).build();
         Customer customer = Customer.builder().id(9L).firstName("Grace").lastName("Hopper").build();
         Product product = Product.builder().id(8L).productName("Monitor").unitPrice(150f).build();
@@ -188,7 +188,7 @@ class OrderServiceImplTest {
     }
 
     @Test
-    void deleteErrorsWithResourceNotFoundWhenMissing() {
+    void _09_ShouldErrorWithResourceNotFound_WhenDeletedOrderIsMissing() {
         when(orderRepository.findById(1L)).thenReturn(Mono.empty());
 
         StepVerifier.create(orderService.delete(1L))
@@ -197,7 +197,7 @@ class OrderServiceImplTest {
     }
 
     @Test
-    void deletePublishesDeletedEventWhenFound() {
+    void _10_ShouldPublishDeletedEvent_WhenOrderIsDeleted() {
         Order existing = Order.builder().id(1L).customerId(2L).productId(3L).quantity(1).total(100).build();
         when(orderRepository.findById(1L)).thenReturn(Mono.just(existing));
         when(orderRepository.deleteById(1L)).thenReturn(Mono.empty());

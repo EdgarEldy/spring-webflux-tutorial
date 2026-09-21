@@ -55,7 +55,7 @@ class ProductRepositoryTest {
     }
 
     @Test
-    void findByCategoryIdReturnsOnlyProductsOfThatCategory() {
+    void _01_ShouldReturnOnlyProductsOfCategory_WhenFindingByCategoryId() {
         Long otherCategoryId = categoryRepository.save(Category.builder().categoryName("Books").build())
                 .block()
                 .getId();
@@ -70,7 +70,7 @@ class ProductRepositoryTest {
     }
 
     @Test
-    void findAllPagedOrdersByIdAndRespectsLimitOffset() {
+    void _02_ShouldOrderByIdAndRespectLimitOffset_WhenFindingAllPaged() {
         productRepository.save(Product.builder().categoryId(categoryId).productName("A").unitPrice(1f).build()).block();
         productRepository.save(Product.builder().categoryId(categoryId).productName("B").unitPrice(2f).build()).block();
         productRepository.save(Product.builder().categoryId(categoryId).productName("C").unitPrice(3f).build()).block();
@@ -82,7 +82,7 @@ class ProductRepositoryTest {
     }
 
     @Test
-    void countByCategoryIdCountsOnlyThatCategory() {
+    void _03_ShouldCountOnlyThatCategory_WhenCountingByCategoryId() {
         Long otherCategoryId = categoryRepository.save(Category.builder().categoryName("Books").build())
                 .block()
                 .getId();

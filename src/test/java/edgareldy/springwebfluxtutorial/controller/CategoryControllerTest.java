@@ -54,7 +54,7 @@ class CategoryControllerTest {
     private JwtService jwtService;
 
     @Test
-    void findAllReturnsWrappedPage() {
+    void _01_ShouldReturnWrappedPage_WhenCategoriesAreListed() {
         CategoryResponse category = new CategoryResponse(1L, "Electronics");
         PageResponse<CategoryResponse> page = PageResponse.of(List.of(category), 0, 20, 1);
         when(categoryService.findAll(0, 20)).thenReturn(Mono.just(page));
@@ -68,7 +68,7 @@ class CategoryControllerTest {
     }
 
     @Test
-    void findByIdReturns404WhenMissing() {
+    void _02_ShouldReturn404_WhenCategoryIsMissing() {
         when(categoryService.findById(99L))
                 .thenReturn(Mono.error(new ResourceNotFoundException("Category not found with id 99")));
 
@@ -80,7 +80,7 @@ class CategoryControllerTest {
     }
 
     @Test
-    void createReturns201OnSuccess() {
+    void _03_ShouldReturn201_WhenCategoryIsCreated() {
         CategoryResponse response = new CategoryResponse(1L, "Electronics");
         when(categoryService.create(any(CategoryRequest.class))).thenReturn(Mono.just(response));
 
@@ -94,7 +94,7 @@ class CategoryControllerTest {
     }
 
     @Test
-    void createReturns400OnValidationFailure() {
+    void _04_ShouldReturn400_WhenValidationFails() {
         webTestClient.post().uri("/api/v1/categories")
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(new CategoryRequest(""))
@@ -103,7 +103,7 @@ class CategoryControllerTest {
     }
 
     @Test
-    void updateReturns200OnSuccess() {
+    void _05_ShouldReturn200_WhenCategoryIsUpdated() {
         CategoryResponse response = new CategoryResponse(1L, "Updated");
         when(categoryService.update(eq(1L), any(CategoryRequest.class))).thenReturn(Mono.just(response));
 
@@ -117,7 +117,7 @@ class CategoryControllerTest {
     }
 
     @Test
-    void updateReturns404WhenMissing() {
+    void _06_ShouldReturn404_WhenUpdatedCategoryIsMissing() {
         when(categoryService.update(eq(99L), any(CategoryRequest.class)))
                 .thenReturn(Mono.error(new ResourceNotFoundException("Category not found with id 99")));
 
@@ -129,7 +129,7 @@ class CategoryControllerTest {
     }
 
     @Test
-    void deleteReturns422WhenCategoryStillHasProducts() {
+    void _07_ShouldReturn422_WhenCategoryStillHasProducts() {
         when(categoryService.delete(1L)).thenReturn(Mono.error(
                 new BusinessRuleException("Cannot delete category 1 because it still has products")));
 
@@ -139,7 +139,7 @@ class CategoryControllerTest {
     }
 
     @Test
-    void deleteReturns200OnSuccess() {
+    void _08_ShouldReturn200_WhenCategoryIsDeleted() {
         when(categoryService.delete(1L)).thenReturn(Mono.empty());
 
         webTestClient.delete().uri("/api/v1/categories/1")

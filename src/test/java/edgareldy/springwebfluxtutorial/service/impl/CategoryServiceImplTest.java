@@ -50,7 +50,7 @@ class CategoryServiceImplTest {
     }
 
     @Test
-    void findByIdReturnsMappedResponseWhenFound() {
+    void _01_ShouldReturnMappedResponse_WhenCategoryIsFound() {
         Category category = Category.builder().id(1L).categoryName("Electronics").build();
         CategoryResponse response = new CategoryResponse(1L, "Electronics");
         when(categoryRepository.findById(1L)).thenReturn(Mono.just(category));
@@ -62,7 +62,7 @@ class CategoryServiceImplTest {
     }
 
     @Test
-    void findByIdErrorsWithResourceNotFoundWhenMissing() {
+    void _02_ShouldErrorWithResourceNotFound_WhenCategoryIsMissing() {
         when(categoryRepository.findById(1L)).thenReturn(Mono.empty());
 
         StepVerifier.create(categoryService.findById(1L))
@@ -71,7 +71,7 @@ class CategoryServiceImplTest {
     }
 
     @Test
-    void findAllZipsPagedContentWithTotalCount() {
+    void _03_ShouldZipPagedContentWithTotalCount_WhenAllCategoriesAreRequested() {
         Category category = Category.builder().id(1L).categoryName("Electronics").build();
         CategoryResponse response = new CategoryResponse(1L, "Electronics");
         when(categoryRepository.findAllPaged(20, 0)).thenReturn(Flux.just(category));
@@ -84,7 +84,7 @@ class CategoryServiceImplTest {
     }
 
     @Test
-    void createSavesMappedEntityAndReturnsMappedResponse() {
+    void _04_ShouldSaveMappedEntityAndReturnMappedResponse_WhenCategoryIsCreated() {
         CategoryRequest request = new CategoryRequest("Electronics");
         Category toSave = Category.builder().categoryName("Electronics").build();
         Category saved = Category.builder().id(1L).categoryName("Electronics").build();
@@ -99,7 +99,7 @@ class CategoryServiceImplTest {
     }
 
     @Test
-    void updateErrorsWithResourceNotFoundWhenMissing() {
+    void _05_ShouldErrorWithResourceNotFound_WhenUpdatedCategoryIsMissing() {
         when(categoryRepository.findById(1L)).thenReturn(Mono.empty());
 
         StepVerifier.create(categoryService.update(1L, new CategoryRequest("New name")))
@@ -108,7 +108,7 @@ class CategoryServiceImplTest {
     }
 
     @Test
-    void updateSavesModifiedEntity() {
+    void _06_ShouldSaveModifiedEntity_WhenCategoryIsUpdated() {
         Category existing = Category.builder().id(1L).categoryName("Old").build();
         Category updated = Category.builder().id(1L).categoryName("New").build();
         CategoryResponse response = new CategoryResponse(1L, "New");
@@ -122,7 +122,7 @@ class CategoryServiceImplTest {
     }
 
     @Test
-    void deleteErrorsWithResourceNotFoundWhenMissing() {
+    void _07_ShouldErrorWithResourceNotFound_WhenDeletedCategoryIsMissing() {
         when(categoryRepository.findById(1L)).thenReturn(Mono.empty());
 
         StepVerifier.create(categoryService.delete(1L))
@@ -131,7 +131,7 @@ class CategoryServiceImplTest {
     }
 
     @Test
-    void deleteErrorsWithBusinessRuleWhenProductsStillLinked() {
+    void _08_ShouldErrorWithBusinessRule_WhenProductsAreStillLinked() {
         Category existing = Category.builder().id(1L).categoryName("Electronics").build();
         Product linkedProduct = Product.builder().id(10L).categoryId(1L).build();
         when(categoryRepository.findById(1L)).thenReturn(Mono.just(existing));
@@ -143,7 +143,7 @@ class CategoryServiceImplTest {
     }
 
     @Test
-    void deletesWhenNoProductsLinked() {
+    void _09_ShouldDeleteCategory_WhenNoProductsAreLinked() {
         Category existing = Category.builder().id(1L).categoryName("Electronics").build();
         when(categoryRepository.findById(1L)).thenReturn(Mono.just(existing));
         when(productRepository.findByCategoryId(1L)).thenReturn(Flux.empty());

@@ -52,7 +52,7 @@ class CustomerRouterTest {
     private JwtService jwtService;
 
     @Test
-    void findAllReturnsWrappedPage() {
+    void _01_ShouldReturnWrappedPage_WhenCustomersAreListed() {
         CustomerResponse customer = new CustomerResponse(1L, "Ada", "Lovelace", "555-0100", "ada@example.com", "1 Main St");
         PageResponse<CustomerResponse> page = PageResponse.of(List.of(customer), 0, 20, 1);
         when(customerService.findAll(0, 20, null)).thenReturn(Mono.just(page));
@@ -66,7 +66,7 @@ class CustomerRouterTest {
     }
 
     @Test
-    void findAllSearchesByNameWhenSearchProvided() {
+    void _02_ShouldSearchByName_WhenSearchTermIsProvided() {
         CustomerResponse customer = new CustomerResponse(1L, "Ada", "Lovelace", "555-0100", "ada@example.com", "1 Main St");
         PageResponse<CustomerResponse> page = PageResponse.of(List.of(customer), 0, 20, 1);
         when(customerService.findAll(0, 20, "lovelace")).thenReturn(Mono.just(page));
@@ -79,7 +79,7 @@ class CustomerRouterTest {
     }
 
     @Test
-    void findByIdReturns404WhenMissing() {
+    void _03_ShouldReturn404_WhenCustomerIsMissing() {
         when(customerService.findById(99L))
                 .thenReturn(Mono.error(new ResourceNotFoundException("Customer not found with id 99")));
 
@@ -91,7 +91,7 @@ class CustomerRouterTest {
     }
 
     @Test
-    void createReturns201OnSuccess() {
+    void _04_ShouldReturn201_WhenCustomerIsCreated() {
         CustomerResponse response = new CustomerResponse(1L, "Ada", "Lovelace", "555-0100", "ada@example.com", "1 Main St");
         when(customerService.create(any(CustomerRequest.class))).thenReturn(Mono.just(response));
 
@@ -105,7 +105,7 @@ class CustomerRouterTest {
     }
 
     @Test
-    void createReturns400OnManualValidationFailure() {
+    void _05_ShouldReturn400_WhenManualValidationFails() {
         webTestClient.post().uri("/api/v1/customers")
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(new CustomerRequest("", "", "", "not-an-email", ""))
@@ -116,7 +116,7 @@ class CustomerRouterTest {
     }
 
     @Test
-    void findByIdReturns400WhenIdIsNotNumeric() {
+    void _06_ShouldReturn400_WhenIdIsNotNumeric() {
         webTestClient.get().uri("/api/v1/customers/not-a-number")
                 .exchange()
                 .expectStatus().isBadRequest()
@@ -125,14 +125,14 @@ class CustomerRouterTest {
     }
 
     @Test
-    void findAllReturns400WhenPageIsNotNumeric() {
+    void _07_ShouldReturn400_WhenPageIsNotNumeric() {
         webTestClient.get().uri("/api/v1/customers?page=not-a-number")
                 .exchange()
                 .expectStatus().isBadRequest();
     }
 
     @Test
-    void createReturns422WhenEmailAlreadyTaken() {
+    void _08_ShouldReturn422_WhenEmailIsAlreadyTaken() {
         when(customerService.create(any(CustomerRequest.class))).thenReturn(Mono.error(
                 new BusinessRuleException("Email ada@example.com is already in use")));
 
@@ -144,7 +144,7 @@ class CustomerRouterTest {
     }
 
     @Test
-    void updateReturns200OnSuccess() {
+    void _09_ShouldReturn200_WhenCustomerIsUpdated() {
         CustomerResponse response = new CustomerResponse(1L, "Ada", "Lovelace", "555-0199", "ada@example.com", "2 Main St");
         when(customerService.update(eq(1L), any(CustomerRequest.class))).thenReturn(Mono.just(response));
 
@@ -158,7 +158,7 @@ class CustomerRouterTest {
     }
 
     @Test
-    void deleteReturns200OnSuccess() {
+    void _10_ShouldReturn200_WhenCustomerIsDeleted() {
         when(customerService.delete(1L)).thenReturn(Mono.empty());
 
         webTestClient.delete().uri("/api/v1/customers/1")

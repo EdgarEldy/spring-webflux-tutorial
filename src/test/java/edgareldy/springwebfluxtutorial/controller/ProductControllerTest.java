@@ -53,7 +53,7 @@ class ProductControllerTest {
     private JwtService jwtService;
 
     @Test
-    void findAllReturnsWrappedPage() {
+    void _01_ShouldReturnWrappedPage_WhenProductsAreListed() {
         CategoryResponse category = new CategoryResponse(1L, "Electronics");
         ProductResponse product = new ProductResponse(1L, category, "Laptop", 999f);
         PageResponse<ProductResponse> page = PageResponse.of(List.of(product), 0, 20, 1);
@@ -69,7 +69,7 @@ class ProductControllerTest {
     }
 
     @Test
-    void findAllFiltersByCategoryId() {
+    void _02_ShouldFilterProducts_WhenCategoryIdIsGiven() {
         CategoryResponse category = new CategoryResponse(1L, "Electronics");
         ProductResponse product = new ProductResponse(1L, category, "Laptop", 999f);
         PageResponse<ProductResponse> page = PageResponse.of(List.of(product), 0, 20, 1);
@@ -83,7 +83,7 @@ class ProductControllerTest {
     }
 
     @Test
-    void findByIdReturns404WhenMissing() {
+    void _03_ShouldReturn404_WhenProductIsMissing() {
         when(productService.findById(99L))
                 .thenReturn(Mono.error(new ResourceNotFoundException("Product not found with id 99")));
 
@@ -95,7 +95,7 @@ class ProductControllerTest {
     }
 
     @Test
-    void createReturns201OnSuccess() {
+    void _04_ShouldReturn201_WhenProductIsCreated() {
         CategoryResponse category = new CategoryResponse(1L, "Electronics");
         ProductResponse response = new ProductResponse(1L, category, "Laptop", 999f);
         when(productService.create(any(ProductRequest.class))).thenReturn(Mono.just(response));
@@ -110,7 +110,7 @@ class ProductControllerTest {
     }
 
     @Test
-    void createReturns400OnValidationFailure() {
+    void _05_ShouldReturn400_WhenValidationFails() {
         webTestClient.post().uri("/api/v1/products")
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(new ProductRequest(null, "", -5f))
@@ -119,7 +119,7 @@ class ProductControllerTest {
     }
 
     @Test
-    void updateReturns200OnSuccess() {
+    void _06_ShouldReturn200_WhenProductIsUpdated() {
         CategoryResponse category = new CategoryResponse(2L, "Premium");
         ProductResponse response = new ProductResponse(1L, category, "Laptop Pro", 1299f);
         when(productService.update(eq(1L), any(ProductRequest.class))).thenReturn(Mono.just(response));
@@ -134,7 +134,7 @@ class ProductControllerTest {
     }
 
     @Test
-    void updateReturns404WhenMissing() {
+    void _07_ShouldReturn404_WhenUpdatedProductIsMissing() {
         when(productService.update(eq(99L), any(ProductRequest.class)))
                 .thenReturn(Mono.error(new ResourceNotFoundException("Product not found with id 99")));
 
@@ -146,7 +146,7 @@ class ProductControllerTest {
     }
 
     @Test
-    void deleteReturns200OnSuccess() {
+    void _08_ShouldReturn200_WhenProductIsDeleted() {
         when(productService.delete(1L)).thenReturn(Mono.empty());
 
         webTestClient.delete().uri("/api/v1/products/1")

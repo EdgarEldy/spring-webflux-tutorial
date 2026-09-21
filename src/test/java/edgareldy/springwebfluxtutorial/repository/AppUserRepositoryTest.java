@@ -37,7 +37,7 @@ class AppUserRepositoryTest {
     }
 
     @Test
-    void savesAndReloadsUserRoleCorrectly() {
+    void _01_ShouldReloadUserRole_WhenUserIsSaved() {
         AppUser saved = appUserRepository.save(user("ada", Role.USER)).block();
 
         StepVerifier.create(appUserRepository.findByUsername("ada"))
@@ -46,7 +46,7 @@ class AppUserRepositoryTest {
     }
 
     @Test
-    void savesAndReloadsAdminRoleCorrectly() {
+    void _02_ShouldReloadAdminRole_WhenAdminIsSaved() {
         appUserRepository.save(user("admin", Role.ADMIN)).block();
 
         StepVerifier.create(appUserRepository.findByUsername("admin"))
@@ -55,7 +55,7 @@ class AppUserRepositoryTest {
     }
 
     @Test
-    void existsByUsernameAndExistsByEmailReflectSavedRows() {
+    void _03_ShouldReflectSavedRows_WhenCheckingExistenceByUsernameAndEmail() {
         appUserRepository.save(user("ada", Role.USER)).block();
 
         StepVerifier.create(appUserRepository.existsByUsername("ada")).expectNext(true).verifyComplete();

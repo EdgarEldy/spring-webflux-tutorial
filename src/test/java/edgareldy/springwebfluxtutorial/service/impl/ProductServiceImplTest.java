@@ -52,7 +52,7 @@ class ProductServiceImplTest {
     }
 
     @Test
-    void findByIdResolvesCategoryAndReturnsMappedResponse() {
+    void _01_ShouldResolveCategoryAndReturnMappedResponse_WhenProductIsFound() {
         Product product = Product.builder().id(1L).categoryId(2L).productName("Laptop").unitPrice(999f).build();
         Category category = Category.builder().id(2L).categoryName("Electronics").build();
         CategoryResponse categoryResponse = new CategoryResponse(2L, "Electronics");
@@ -69,7 +69,7 @@ class ProductServiceImplTest {
     }
 
     @Test
-    void findByIdErrorsWithResourceNotFoundWhenMissing() {
+    void _02_ShouldErrorWithResourceNotFound_WhenProductIsMissing() {
         when(productRepository.findById(1L)).thenReturn(Mono.empty());
 
         StepVerifier.create(productService.findById(1L))
@@ -78,7 +78,7 @@ class ProductServiceImplTest {
     }
 
     @Test
-    void createErrorsWithResourceNotFoundWhenCategoryMissing() {
+    void _03_ShouldErrorWithResourceNotFound_WhenProductCategoryIsMissing() {
         ProductRequest request = new ProductRequest(2L, "Laptop", 999f);
         when(categoryRepository.findById(2L)).thenReturn(Mono.empty());
 
@@ -88,7 +88,7 @@ class ProductServiceImplTest {
     }
 
     @Test
-    void createSavesProductWhenCategoryExists() {
+    void _04_ShouldSaveProduct_WhenCategoryExists() {
         ProductRequest request = new ProductRequest(2L, "Laptop", 999f);
         Category category = Category.builder().id(2L).categoryName("Electronics").build();
         Product toSave = Product.builder().categoryId(2L).productName("Laptop").unitPrice(999f).build();
@@ -108,7 +108,7 @@ class ProductServiceImplTest {
     }
 
     @Test
-    void updateErrorsWithResourceNotFoundWhenProductMissing() {
+    void _05_ShouldErrorWithResourceNotFound_WhenUpdatedProductIsMissing() {
         ProductRequest request = new ProductRequest(2L, "Laptop", 999f);
         when(productRepository.findById(1L)).thenReturn(Mono.empty());
 
@@ -118,7 +118,7 @@ class ProductServiceImplTest {
     }
 
     @Test
-    void updateErrorsWithResourceNotFoundWhenCategoryMissing() {
+    void _06_ShouldErrorWithResourceNotFound_WhenUpdatedProductCategoryIsMissing() {
         ProductRequest request = new ProductRequest(99L, "Laptop", 999f);
         Product existing = Product.builder().id(1L).categoryId(2L).productName("Old").unitPrice(1f).build();
         when(productRepository.findById(1L)).thenReturn(Mono.just(existing));
@@ -130,7 +130,7 @@ class ProductServiceImplTest {
     }
 
     @Test
-    void updateSavesProductWhenCategoryExists() {
+    void _07_ShouldSaveProduct_WhenCategoryExistsOnUpdate() {
         ProductRequest request = new ProductRequest(3L, "Laptop Pro", 1299f);
         Product existing = Product.builder().id(1L).categoryId(2L).productName("Laptop").unitPrice(999f).build();
         Category newCategory = Category.builder().id(3L).categoryName("Premium").build();
@@ -150,7 +150,7 @@ class ProductServiceImplTest {
     }
 
     @Test
-    void findAllZipsPagedContentWithTotalCount() {
+    void _08_ShouldZipPagedContentWithTotalCount_WhenAllProductsAreRequested() {
         Product product = Product.builder().id(1L).categoryId(2L).productName("Laptop").unitPrice(999f).build();
         Category category = Category.builder().id(2L).categoryName("Electronics").build();
         CategoryResponse categoryResponse = new CategoryResponse(2L, "Electronics");
@@ -168,7 +168,7 @@ class ProductServiceImplTest {
     }
 
     @Test
-    void findAllFiltersByCategoryIdWhenProvided() {
+    void _09_ShouldFilterByCategoryId_WhenCategoryIdIsProvided() {
         Product product = Product.builder().id(1L).categoryId(2L).productName("Laptop").unitPrice(999f).build();
         Category category = Category.builder().id(2L).categoryName("Electronics").build();
         CategoryResponse categoryResponse = new CategoryResponse(2L, "Electronics");
@@ -186,7 +186,7 @@ class ProductServiceImplTest {
     }
 
     @Test
-    void deleteErrorsWithResourceNotFoundWhenMissing() {
+    void _10_ShouldErrorWithResourceNotFound_WhenDeletedProductIsMissing() {
         when(productRepository.findById(1L)).thenReturn(Mono.empty());
 
         StepVerifier.create(productService.delete(1L))
@@ -195,7 +195,7 @@ class ProductServiceImplTest {
     }
 
     @Test
-    void deletesWhenFound() {
+    void _11_ShouldDeleteProduct_WhenProductIsFound() {
         Product product = Product.builder().id(1L).categoryId(2L).productName("Laptop").unitPrice(999f).build();
         when(productRepository.findById(1L)).thenReturn(Mono.just(product));
         when(productRepository.deleteById(1L)).thenReturn(Mono.empty());
