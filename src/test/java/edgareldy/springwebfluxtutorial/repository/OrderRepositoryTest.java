@@ -72,7 +72,7 @@ class OrderRepositoryTest {
     }
 
     @Test
-    void findByIdWithDetailsJoinsCustomerAndProduct() {
+    void _01_ShouldJoinCustomerAndProduct_WhenFindingByIdWithDetails() {
         Order saved = orderRepository.save(Order.builder()
                         .customerId(customerId)
                         .productId(productId)
@@ -89,7 +89,7 @@ class OrderRepositoryTest {
     }
 
     @Test
-    void findAllWithDetailsOrdersByIdAndRespectsLimitOffset() {
+    void _02_ShouldOrderByIdAndRespectLimitOffset_WhenFindingAllWithDetails() {
         orderRepository.save(Order.builder().customerId(customerId).productId(productId).quantity(1).total(1000).build()).block();
         orderRepository.save(Order.builder().customerId(customerId).productId(productId).quantity(2).total(2000).build()).block();
         orderRepository.save(Order.builder().customerId(customerId).productId(productId).quantity(3).total(3000).build()).block();
@@ -101,7 +101,7 @@ class OrderRepositoryTest {
     }
 
     @Test
-    void countSinceAndSumTotalSinceAggregateTodaysOrders() {
+    void _03_ShouldAggregateTodaysOrders_WhenCountingAndSummingSince() {
         orderRepository.save(Order.builder().customerId(customerId).productId(productId).quantity(1).total(1000).build()).block();
         orderRepository.save(Order.builder().customerId(customerId).productId(productId).quantity(2).total(2000).build()).block();
 

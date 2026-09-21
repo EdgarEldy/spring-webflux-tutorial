@@ -51,7 +51,7 @@ class AuthControllerTest {
     private JwtService jwtService;
 
     @Test
-    void registerReturns201OnSuccess() {
+    void _01_ShouldReturn201_WhenRegistrationSucceeds() {
         when(authService.register(any(RegisterRequest.class)))
                 .thenReturn(Mono.just(new AuthResponse("token123", "ada", "USER")));
 
@@ -65,7 +65,7 @@ class AuthControllerTest {
     }
 
     @Test
-    void registerReturns400OnValidationFailure() {
+    void _02_ShouldReturn400_WhenRegistrationValidationFails() {
         webTestClient.post().uri("/api/v1/auth/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(new RegisterRequest("", "short", "not-an-email"))
@@ -74,7 +74,7 @@ class AuthControllerTest {
     }
 
     @Test
-    void loginReturns200OnSuccess() {
+    void _03_ShouldReturn200_WhenLoginSucceeds() {
         when(authService.login(any(LoginRequest.class)))
                 .thenReturn(Mono.just(new AuthResponse("token456", "ada", "ADMIN")));
 
@@ -88,7 +88,7 @@ class AuthControllerTest {
     }
 
     @Test
-    void loginReturns401OnBadCredentials() {
+    void _04_ShouldReturn401_WhenCredentialsAreBad() {
         when(authService.login(any(LoginRequest.class)))
                 .thenReturn(Mono.error(new BadCredentialsException("Invalid username or password")));
 

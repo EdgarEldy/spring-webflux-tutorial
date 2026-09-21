@@ -19,7 +19,7 @@ class JwtServiceTest {
             "test-only-signing-secret-at-least-256-bits-long-0123456789", 3_600_000L);
 
     @Test
-    void generatedTokenRoundTripsUsernameAndRole() {
+    void _01_ShouldRoundTripUsernameAndRole_WhenTokenIsGenerated() {
         String token = jwtService.generateToken("ada", "ADMIN");
 
         assertThat(jwtService.extractUsername(token)).isEqualTo("ada");
@@ -28,19 +28,19 @@ class JwtServiceTest {
     }
 
     @Test
-    void tamperedTokenIsNotValid() {
+    void _02_ShouldBeInvalid_WhenTokenIsTampered() {
         String token = jwtService.generateToken("ada", "USER");
 
         assertThat(jwtService.isValid(token + "tampered")).isFalse();
     }
 
     @Test
-    void malformedTokenIsNotValid() {
+    void _03_ShouldBeInvalid_WhenTokenIsMalformed() {
         assertThat(jwtService.isValid("not-a-jwt-at-all")).isFalse();
     }
 
     @Test
-    void expiredTokenIsNotValid() {
+    void _04_ShouldBeInvalid_WhenTokenIsExpired() {
         JwtService shortLivedJwtService = new JwtService(
                 "test-only-signing-secret-at-least-256-bits-long-0123456789", -1_000L);
 

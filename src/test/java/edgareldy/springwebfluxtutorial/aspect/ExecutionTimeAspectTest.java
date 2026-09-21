@@ -45,7 +45,7 @@ class ExecutionTimeAspectTest {
     }
 
     @Test
-    void measuresElapsedTimeFromSubscriptionNotFromProceedCall() throws Throwable {
+    void _01_ShouldMeasureElapsedTimeFromSubscription_WhenPipelineIsSubscribed() throws Throwable {
         Duration delay = Duration.ofMillis(50);
         ProceedingJoinPoint joinPoint = mockJoinPoint(Mono.just("done").delayElement(delay));
 
