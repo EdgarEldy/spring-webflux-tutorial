@@ -16,6 +16,8 @@ This document is the **complete specification** of the project: it is meant to b
 - [Project structure](#project-structure)
 - [Standard response format](#standard-response-format)
 - [Spring AOP in a reactive context](#spring-aop-in-a-reactive-context)
+- [Testing strategy](#testing-strategy)
+  - [Test naming convention](#test-naming-convention)
 - [feature/core-architecture](#featurecore-architecture)
 - [feature/products](#featureproducts)
 - [feature/customers](#featurecustomers)
@@ -233,6 +235,31 @@ A point of attention specific to WebFlux: a classic `@Around` advice that logs b
 - `LoggingAspect`: intercepts the call, retrieves the returned `Mono`/`Flux`, and attaches logging via `.doOnNext()`, `.doOnError()`, `.doFinally()` instead of running code right after the method call
 - `ExecutionTimeAspect`: measures the real execution time by subscribing at the end of the stream (`.doFinally(signal -> ...)`), not at the moment of the method call
 - Serves as a teaching case to illustrate why "naive" AOP does not work as-is with reactive types
+
+## Testing strategy
+
+Every branch ships its tests before its Pull Request is opened, at the layers that apply to what the branch adds.
+
+| Layer | Tool | What it verifies |
+|---|---|---|
+| Repository | `@DataR2dbcTest` + Testcontainers (real PostgreSQL) | Derived queries and constraints against a real schema, asserted with `StepVerifier` |
+| Service | JUnit 5 + Mockito + `StepVerifier` | Business rules and orchestration of the reactive pipelines, with every repository dependency mocked |
+| Controller / router | `WebTestClient` | HTTP status codes, payload shape (`ApiResponse<T>`) and error mapping, on annotated controllers and on functional routes |
+| Aspects and security | JUnit 5 + `StepVerifier` | Logging and timing aspects that must only act on subscription, JWT handling and authorization rules |
+
+### Test naming convention
+
+Every test method, at every layer, is named `_NN_Should<Outcome>_When<Condition>`: a two-digit, zero-padded sequence number (the order of the methods within the class, restarting at `_01_` in each class; JUnit does not enforce it, it is kept consistent by convention), followed by what is expected, followed by the condition that produces it.
+
+```java
+@Test
+void _01_ShouldEmitCategory_WhenCategoryExists() { ... }
+
+@Test
+void _02_ShouldEmitNotFoundError_WhenCategoryDoesNotExist() { ... }
+```
+
+No other naming style (`shouldX()`, `testX()`, `givenX_whenY_thenZ()`, `mapsResourceNotFoundExceptionTo404()`) is used anywhere in this project's test suite. This applies to test methods only, not to `@BeforeEach`/`@AfterEach` helpers.
 
 ## feature/core-architecture
 
