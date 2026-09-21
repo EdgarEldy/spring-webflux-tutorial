@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Import;
 class SpringWebfluxTutorialApplicationTests {
 
 	@Test
-	void contextLoads() {
+	void _01_ShouldLoadApplicationContext_WhenApplicationStarts() {
 	}
 
 }
