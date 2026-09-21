@@ -50,14 +50,14 @@ class SecurityAuthorizationTest {
     private PasswordEncoder passwordEncoder;
 
     @Test
-    void publicGetEndpointIsReachableWithoutAuthentication() {
+    void _01_ShouldReachEndpoint_WhenPublicGetHasNoAuthentication() {
         webTestClient.get().uri("/api/v1/categories")
                 .exchange()
                 .expectStatus().isOk();
     }
 
     @Test
-    void writeEndpointWithoutTokenReturns401() {
+    void _02_ShouldReturn401_WhenWriteEndpointHasNoToken() {
         webTestClient.post().uri("/api/v1/categories")
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(new CategoryRequest("Unauthorized attempt"))
@@ -66,14 +66,14 @@ class SecurityAuthorizationTest {
     }
 
     @Test
-    void authenticatedEndpointWithoutTokenReturns401() {
+    void _03_ShouldReturn401_WhenAuthenticatedEndpointHasNoToken() {
         webTestClient.get().uri("/api/v1/customers")
                 .exchange()
                 .expectStatus().isUnauthorized();
     }
 
     @Test
-    void registerLoginThenAccessAuthenticatedEndpointWithRealToken() {
+    void _04_ShouldAccessAuthenticatedEndpoint_WhenUserRegistersLogsInAndUsesRealToken() {
         String username = "e2e-user-" + UUID.randomUUID();
 
         webTestClient.post().uri("/api/v1/auth/register")
@@ -108,7 +108,7 @@ class SecurityAuthorizationTest {
     }
 
     @Test
-    void freshlyRegisteredUserCannotWriteToAdminOnlyEndpoint() {
+    void _05_ShouldReturn403_WhenFreshlyRegisteredUserWritesToAdminOnlyEndpoint() {
         String username = "e2e-user-" + UUID.randomUUID();
 
         webTestClient.post().uri("/api/v1/auth/register")
@@ -138,7 +138,7 @@ class SecurityAuthorizationTest {
     }
 
     @Test
-    void adminUserCanWriteToAdminOnlyEndpoint() {
+    void _06_ShouldAllowWrite_WhenAdminUserWritesToAdminOnlyEndpoint() {
         String username = "e2e-admin-" + UUID.randomUUID();
 
         appUserRepository.save(AppUser.builder()
