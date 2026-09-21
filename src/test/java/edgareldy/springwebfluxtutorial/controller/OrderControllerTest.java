@@ -51,7 +51,7 @@ class OrderControllerTest {
     private Sinks.Many<OrderStatusEvent> orderStatusSink;
 
     @Test
-    void findAllReturnsWrappedPage() {
+    void _01_ShouldReturnWrappedPage_WhenOrdersAreListed() {
         OrderResponse order = orderResponse();
         PageResponse<OrderResponse> page = PageResponse.of(List.of(order), 0, 20, 1);
         when(orderService.findAll(0, 20)).thenReturn(Mono.just(page));
@@ -65,7 +65,7 @@ class OrderControllerTest {
     }
 
     @Test
-    void findByIdReturns404WhenMissing() {
+    void _02_ShouldReturn404_WhenOrderIsMissing() {
         when(orderService.findById(99L))
                 .thenReturn(Mono.error(new ResourceNotFoundException("Order not found with id 99")));
 
@@ -75,7 +75,7 @@ class OrderControllerTest {
     }
 
     @Test
-    void createReturns201OnSuccess() {
+    void _03_ShouldReturn201_WhenOrderIsCreated() {
         when(orderService.create(any(OrderRequest.class))).thenReturn(Mono.just(orderResponse()));
 
         webTestClient.post().uri("/api/v1/orders")
@@ -88,7 +88,7 @@ class OrderControllerTest {
     }
 
     @Test
-    void createReturns400OnValidationFailure() {
+    void _04_ShouldReturn400_WhenValidationFails() {
         webTestClient.post().uri("/api/v1/orders")
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(new OrderRequest(null, null, -1))
@@ -97,7 +97,7 @@ class OrderControllerTest {
     }
 
     @Test
-    void updateReturns200OnSuccess() {
+    void _05_ShouldReturn200_WhenOrderIsUpdated() {
         when(orderService.update(eq(1L), any(OrderRequest.class)))
                 .thenReturn(Mono.just(orderResponse()));
 
@@ -109,7 +109,7 @@ class OrderControllerTest {
     }
 
     @Test
-    void deleteReturns200OnSuccess() {
+    void _06_ShouldReturn200_WhenOrderIsDeleted() {
         when(orderService.delete(1L)).thenReturn(Mono.empty());
 
         webTestClient.delete().uri("/api/v1/orders/1")
@@ -120,7 +120,7 @@ class OrderControllerTest {
     }
 
     @Test
-    void streamExposesRawEventStreamNotWrappedInApiResponse() {
+    void _07_ShouldExposeRawEventStreamNotWrappedInApiResponse_WhenStreamIsRequested() {
         OrderStatusEvent event = new OrderStatusEvent(1L, "CREATED", Instant.now());
         when(orderStatusSink.asFlux()).thenReturn(Flux.just(event));
 
