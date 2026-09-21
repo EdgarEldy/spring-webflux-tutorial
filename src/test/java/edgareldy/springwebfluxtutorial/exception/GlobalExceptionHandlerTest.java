@@ -46,27 +46,27 @@ class GlobalExceptionHandlerTest {
     }
 
     @Test
-    void mapsGenericAuthenticationExceptionTo401() {
+    void _04_ShouldMapTo401_WhenGenericAuthenticationExceptionIsHandled() {
         assertStatus(new AuthenticationCredentialsNotFoundException("no credentials"), HttpStatus.UNAUTHORIZED);
     }
 
     @Test
-    void mapsAccessDeniedExceptionTo403() {
+    void _05_ShouldMapTo403_WhenAccessDeniedExceptionIsHandled() {
         assertStatus(new AccessDeniedException("denied"), HttpStatus.FORBIDDEN);
     }
 
     @Test
-    void _04_ShouldMapTo400_WhenServerWebInputExceptionIsHandled() {
+    void _06_ShouldMapTo400_WhenServerWebInputExceptionIsHandled() {
         assertStatus(new ServerWebInputException("malformed body"), HttpStatus.BAD_REQUEST);
     }
 
     @Test
-    void _05_ShouldMapToItsOwnStatus_WhenNativeResponseStatusExceptionIsHandled() {
+    void _07_ShouldMapToItsOwnStatus_WhenNativeResponseStatusExceptionIsHandled() {
         assertStatus(new ResponseStatusException(HttpStatus.METHOD_NOT_ALLOWED), HttpStatus.METHOD_NOT_ALLOWED);
     }
 
     @Test
-    void _06_ShouldMapTo500_WhenUnrecognizedExceptionIsHandled() {
+    void _08_ShouldMapTo500_WhenUnrecognizedExceptionIsHandled() {
         assertStatus(new RuntimeException("boom"), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
