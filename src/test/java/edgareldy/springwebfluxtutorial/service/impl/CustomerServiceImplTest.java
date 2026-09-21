@@ -45,7 +45,7 @@ class CustomerServiceImplTest {
     }
 
     @Test
-    void findByIdReturnsMappedResponseWhenFound() {
+    void _01_ShouldReturnMappedResponse_WhenCustomerIsFound() {
         Customer customer = customer(1L, "ada@example.com");
         CustomerResponse response = response(1L, "ada@example.com");
         when(customerRepository.findById(1L)).thenReturn(Mono.just(customer));
@@ -57,7 +57,7 @@ class CustomerServiceImplTest {
     }
 
     @Test
-    void findByIdErrorsWithResourceNotFoundWhenMissing() {
+    void _02_ShouldErrorWithResourceNotFound_WhenCustomerIsMissing() {
         when(customerRepository.findById(1L)).thenReturn(Mono.empty());
 
         StepVerifier.create(customerService.findById(1L))
@@ -66,7 +66,7 @@ class CustomerServiceImplTest {
     }
 
     @Test
-    void findAllZipsPagedContentWithTotalCount() {
+    void _03_ShouldZipPagedContentWithTotalCount_WhenAllCustomersAreRequested() {
         Customer customer = customer(1L, "ada@example.com");
         CustomerResponse response = response(1L, "ada@example.com");
         when(customerRepository.findAllPaged(20, 0)).thenReturn(Flux.just(customer));
@@ -79,7 +79,7 @@ class CustomerServiceImplTest {
     }
 
     @Test
-    void findAllSearchesByNameWhenSearchProvided() {
+    void _04_ShouldSearchByName_WhenSearchTermIsProvided() {
         Customer customer = customer(1L, "ada@example.com");
         CustomerResponse response = response(1L, "ada@example.com");
         when(customerRepository.searchPaged("lovelace", 20, 0)).thenReturn(Flux.just(customer));
@@ -92,7 +92,7 @@ class CustomerServiceImplTest {
     }
 
     @Test
-    void createSavesCustomerWhenEmailNotTaken() {
+    void _05_ShouldSaveCustomer_WhenEmailIsNotTaken() {
         CustomerRequest request = request("ada@example.com");
         Customer toSave = customer(null, "ada@example.com");
         Customer saved = customer(1L, "ada@example.com");
@@ -108,7 +108,7 @@ class CustomerServiceImplTest {
     }
 
     @Test
-    void createErrorsWithBusinessRuleWhenEmailAlreadyTaken() {
+    void _06_ShouldErrorWithBusinessRule_WhenEmailIsAlreadyTaken() {
         CustomerRequest request = request("ada@example.com");
         Customer existing = customer(5L, "ada@example.com");
         when(customerRepository.findByEmailIgnoreCase("ada@example.com")).thenReturn(Mono.just(existing));
@@ -119,7 +119,7 @@ class CustomerServiceImplTest {
     }
 
     @Test
-    void updateErrorsWithResourceNotFoundWhenMissing() {
+    void _07_ShouldErrorWithResourceNotFound_WhenUpdatedCustomerIsMissing() {
         when(customerRepository.findById(1L)).thenReturn(Mono.empty());
 
         StepVerifier.create(customerService.update(1L, request("ada@example.com")))
@@ -128,7 +128,7 @@ class CustomerServiceImplTest {
     }
 
     @Test
-    void updateAllowsKeepingOwnEmail() {
+    void _08_ShouldAllowUpdate_WhenCustomerKeepsOwnEmail() {
         Customer existing = customer(1L, "ada@example.com");
         Customer updated = customer(1L, "ada@example.com");
         CustomerResponse response = response(1L, "ada@example.com");
@@ -143,7 +143,7 @@ class CustomerServiceImplTest {
     }
 
     @Test
-    void updateErrorsWithBusinessRuleWhenEmailBelongsToSomeoneElse() {
+    void _09_ShouldErrorWithBusinessRule_WhenEmailBelongsToSomeoneElse() {
         Customer existing = customer(1L, "ada@example.com");
         Customer other = customer(2L, "grace@example.com");
         when(customerRepository.findById(1L)).thenReturn(Mono.just(existing));
@@ -155,7 +155,7 @@ class CustomerServiceImplTest {
     }
 
     @Test
-    void deleteErrorsWithResourceNotFoundWhenMissing() {
+    void _10_ShouldErrorWithResourceNotFound_WhenDeletedCustomerIsMissing() {
         when(customerRepository.findById(1L)).thenReturn(Mono.empty());
 
         StepVerifier.create(customerService.delete(1L))
@@ -164,7 +164,7 @@ class CustomerServiceImplTest {
     }
 
     @Test
-    void deletesWhenFound() {
+    void _11_ShouldDeleteCustomer_WhenCustomerIsFound() {
         Customer customer = customer(1L, "ada@example.com");
         when(customerRepository.findById(1L)).thenReturn(Mono.just(customer));
         when(customerRepository.deleteById(1L)).thenReturn(Mono.empty());

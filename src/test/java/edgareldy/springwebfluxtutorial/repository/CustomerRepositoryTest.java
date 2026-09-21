@@ -44,7 +44,7 @@ class CustomerRepositoryTest {
     }
 
     @Test
-    void findByEmailIgnoreCaseMatchesRegardlessOfCase() {
+    void _01_ShouldMatchRegardlessOfCase_WhenFindingByEmail() {
         customerRepository.save(customer("Ada", "Lovelace", "ada@example.com")).block();
 
         StepVerifier.create(customerRepository.findByEmailIgnoreCase("ADA@EXAMPLE.COM"))
@@ -53,7 +53,7 @@ class CustomerRepositoryTest {
     }
 
     @Test
-    void searchPagedMatchesFirstOrLastName() {
+    void _02_ShouldMatchFirstOrLastName_WhenSearchingPaged() {
         customerRepository.save(customer("Ada", "Lovelace", "ada@example.com")).block();
         customerRepository.save(customer("Grace", "Hopper", "grace@example.com")).block();
 

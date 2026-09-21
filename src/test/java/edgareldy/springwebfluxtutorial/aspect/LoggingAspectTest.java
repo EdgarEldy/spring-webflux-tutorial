@@ -46,7 +46,7 @@ class LoggingAspectTest {
     }
 
     @Test
-    void doesNotSubscribeEagerlyAndLogsOnlyOnceSubscribed() throws Throwable {
+    void _01_ShouldLogOnlyOnceSubscribed_WhenPipelineIsNotSubscribedEagerly() throws Throwable {
         AtomicInteger subscriptions = new AtomicInteger();
         Mono<String> lazySource = Mono.fromSupplier(() -> {
             subscriptions.incrementAndGet();
@@ -71,7 +71,7 @@ class LoggingAspectTest {
     }
 
     @Test
-    void logsErrorOnceSubscribedWithoutSwallowingIt() throws Throwable {
+    void _02_ShouldLogErrorWithoutSwallowingIt_WhenPipelineFailsOnSubscription() throws Throwable {
         RuntimeException boom = new RuntimeException("boom");
         ProceedingJoinPoint joinPoint = mockJoinPoint(Mono.error(boom));
 

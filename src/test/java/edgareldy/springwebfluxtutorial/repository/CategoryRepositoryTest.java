@@ -51,7 +51,7 @@ class CategoryRepositoryTest {
     }
 
     @Test
-    void savesAndFindsById() {
+    void _01_ShouldSaveAndFindCategory_WhenFindingById() {
         Category saved = categoryRepository.save(Category.builder().categoryName("Electronics").build()).block();
 
         StepVerifier.create(categoryRepository.findById(saved.getId()))
@@ -60,7 +60,7 @@ class CategoryRepositoryTest {
     }
 
     @Test
-    void findAllPagedOrdersByIdAndRespectsLimitOffset() {
+    void _02_ShouldOrderByIdAndRespectLimitOffset_WhenFindingAllPaged() {
         categoryRepository.save(Category.builder().categoryName("A").build()).block();
         categoryRepository.save(Category.builder().categoryName("B").build()).block();
         categoryRepository.save(Category.builder().categoryName("C").build()).block();
@@ -72,7 +72,7 @@ class CategoryRepositoryTest {
     }
 
     @Test
-    void countReflectsNumberOfRows() {
+    void _03_ShouldReflectNumberOfRows_WhenCounting() {
         categoryRepository.save(Category.builder().categoryName("A").build()).block();
         categoryRepository.save(Category.builder().categoryName("B").build()).block();
 
